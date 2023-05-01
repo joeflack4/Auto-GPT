@@ -217,7 +217,7 @@ def list_files(directory: str) -> list[str]:
             if file.startswith("."):
                 continue
             relative_path = os.path.relpath(
-                os.path.join(root, file), CFG.workspace_path
+                os.path.join(root, file), CFG.autogpt_workspace_path
             )
             found_files.append(relative_path)
 

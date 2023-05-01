@@ -25,7 +25,7 @@ def generate_image(prompt: str, size: int = 256) -> str:
     Returns:
         str: The filename of the image
     """
-    filename = f"{CFG.workspace_path}/{str(uuid.uuid4())}.jpg"
+    filename = f"{CFG.autogpt_workspace_path}/{str(uuid.uuid4())}.jpg"
 
     # DALL-E
     if CFG.image_provider == "dalle":

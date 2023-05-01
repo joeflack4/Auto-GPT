@@ -38,7 +38,7 @@ class LocalCache(MemoryProviderSingleton):
         Returns:
             None
         """
-        workspace_path = Path(cfg.workspace_path)
+        workspace_path = Path(cfg.autogpt_workspace_path)
         self.filename = workspace_path / f"{cfg.memory_index}.json"
 
         self.filename.touch(exist_ok=True)

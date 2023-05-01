@@ -65,9 +65,9 @@ def execute_python_file(filename: str) -> str:
                     logger.info(status)
         container = client.containers.run(
             image_name,
-            f"python {Path(filename).relative_to(CFG.workspace_path)}",
+            f"python {Path(filename).relative_to(CFG.autogpt_workspace_path)}",
             volumes={
-                CFG.workspace_path: {
+                CFG.autogpt_workspace_path: {
                     "bind": "/workspace",
                     "mode": "ro",
                 }
@@ -118,8 +118,8 @@ def execute_shell(command_line: str) -> str:
 
     current_dir = Path.cwd()
     # Change dir into workspace if necessary
-    if not current_dir.is_relative_to(CFG.workspace_path):
-        os.chdir(CFG.workspace_path)
+    if not current_dir.is_relative_to(CFG.autogpt_workspace_path):
+        os.chdir(CFG.autogpt_workspace_path)
 
     logger.info(
         f"Executing command '{command_line}' in working directory '{os.getcwd()}'"
@@ -156,8 +156,8 @@ def execute_shell_popen(command_line) -> str:
 
     current_dir = os.getcwd()
     # Change dir into workspace if necessary
-    if CFG.workspace_path not in current_dir:
-        os.chdir(CFG.workspace_path)
+    if CFG.autogpt_workspace_path not in current_dir:
+        os.chdir(CFG.autogpt_workspace_path)
 
     logger.info(
         f"Executing command '{command_line}' in working directory '{os.getcwd()}'"

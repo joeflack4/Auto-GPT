@@ -1,5 +1,6 @@
 """Configuration class to store the state of bools for different scripts access."""
 import os
+from pathlib import Path
 from typing import List
 
 import openai
@@ -9,6 +10,8 @@ from colorama import Fore
 
 from autogpt.singleton import Singleton
 
+DEFAULT_AUTOGPT_WORKSPACE_DIR = Path(__file__).parent / "auto_gpt_workspace"
+
 
 class Config(metaclass=Singleton):
     """
@@ -17,7 +20,8 @@ class Config(metaclass=Singleton):
 
     def __init__(self) -> None:
         """Initialize the Config class"""
-        self.workspace_path = None
+        # TODO: this needs to be decoupled from agent_workspace_path
+        self.autogpt_workspace_path = None
         self.file_logger_path = None
 
         self.debug_mode = False
@@ -30,6 +34,7 @@ class Config(metaclass=Singleton):
 
         self.authorise_key = os.getenv("AUTHORISE_COMMAND_KEY", "y")
         self.exit_key = os.getenv("EXIT_KEY", "n")
+        # TODO: This should be set later?
         self.ai_settings_file = os.getenv("AI_SETTINGS_FILE", "ai_settings.yaml")
         self.fast_llm_model = os.getenv("FAST_LLM_MODEL", "gpt-3.5-turbo")
         self.smart_llm_model = os.getenv("SMART_LLM_MODEL", "gpt-4")

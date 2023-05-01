@@ -51,7 +51,6 @@ class Agent:
         config,
         system_prompt,
         triggering_prompt,
-        workspace_directory,
     ):
         cfg = Config()
         self.ai_name = ai_name
@@ -66,6 +65,7 @@ class Agent:
         self.config = config
         self.system_prompt = system_prompt
         self.triggering_prompt = triggering_prompt
+        self.workspace_directory = cfg.workspace_directory
         self.workspace = Workspace(workspace_directory, cfg.restrict_to_workspace)
 
     def start_interaction_loop(self):

@@ -47,13 +47,21 @@ import click
     is_flag=True,
     help="Specifies whether to suppress the output of latest news on startup.",
 )
+# TODO: autogpt-workspace-directory and agent-workspace-directory hidden for now. Necessary for integration testing.
+#   We should make this public once we're ready to roll out agent specific workspaces.
 @click.option(
-    # TODO: this is a hidden option for now, necessary for integration testing.
-    #   We should make this public once we're ready to roll out agent specific workspaces.
-    "--workspace-directory",
+    "--autogpt-workspace-directory",
     "-w",
     type=click.Path(),
     hidden=True,
+    help="Directory that can contain multiple agent workspace directories along with their ai-settings.",
+)
+@click.option(
+    "--agent-workspace-directory",
+    "-W",
+    type=click.Path(),
+    hidden=True,
+    help="Directory where agent will be able to store files and settings.",
 )
 @click.option(
     "--install-plugin-deps",
@@ -75,7 +83,8 @@ def main(
     browser_name: str,
     allow_downloads: bool,
     skip_news: bool,
-    workspace_directory: str,
+    autogpt_workspace_directory: str,
+    agent_workspace_directory: str,
     install_plugin_deps: bool,
 ) -> None:
     """
@@ -100,7 +109,8 @@ def main(
             browser_name,
             allow_downloads,
             skip_news,
-            workspace_directory,
+            autogpt_workspace_directory,
+            agent_workspace_directory,
             install_plugin_deps,
         )
 

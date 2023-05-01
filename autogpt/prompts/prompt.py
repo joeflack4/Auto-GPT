@@ -80,11 +80,14 @@ def build_default_prompt_generator() -> PromptGenerator:
 
 
 def construct_main_ai_config() -> AIConfig:
-    """Construct the prompt for the AI to respond to
+    """Determine the confguration to use for this session
 
     Returns:
-        str: The prompt string
+        AIConfig: The configuration to use for this session
     """
+    # TODO: List all configs
+    configs: list[AIConfig] = AIConfig.list_configs()
+    # TODO: get the most recent config, and load that below
     config = AIConfig.load(CFG.ai_settings_file)
     if CFG.skip_reprompt and config.ai_name:
         logger.typewriter_log("Name :", Fore.GREEN, config.ai_name)
@@ -95,6 +98,7 @@ def construct_main_ai_config() -> AIConfig:
             Fore.GREEN,
             "infinite" if config.api_budget <= 0 else f"${config.api_budget}",
         )
+    # TODO: In addition to below, also ask if they want to look at other previous agents
     elif config.ai_name:
         logger.typewriter_log(
             "Welcome back! ",
@@ -102,6 +106,7 @@ def construct_main_ai_config() -> AIConfig:
             f"Would you like me to return to being {config.ai_name}?",
             speak_text=True,
         )
+
         should_continue = clean_input(
             f"""Continue with the last settings?
 Name:  {config.ai_name}

@@ -16,7 +16,7 @@ def config_allow_execute(config: Config, mocker: MockerFixture):
 
 @pytest.fixture
 def python_test_file(config: Config, random_string):
-    temp_file = tempfile.NamedTemporaryFile(dir=config.workspace_path, suffix=".py")
+    temp_file = tempfile.NamedTemporaryFile(dir=config.autogpt_workspace_path, suffix=".py")
     temp_file.write(str.encode(f"print('Hello {random_string}!')"))
     temp_file.flush()
 

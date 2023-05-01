@@ -8,6 +8,7 @@ from colorama import Fore
 from autogpt.agent.agent import Agent
 from autogpt.commands.command import CommandRegistry
 from autogpt.config import Config, check_openai_api_key
+from autogpt.config.config import DEFAULT_AUTOGPT_WORKSPACE_DIR
 from autogpt.configurator import create_config
 from autogpt.logs import logger
 from autogpt.memory import get_memory
@@ -31,7 +32,9 @@ def run_auto_gpt(
     browser_name: str,
     allow_downloads: bool,
     skip_news: bool,
-    workspace_directory: str,
+    autogpt_workspace_directory: str,
+    # TODO: Utilize
+    agent_workspace_directory: str,
     install_plugin_deps: bool,
 ):
     # Configure logging before we do anything else.
@@ -84,17 +87,18 @@ def run_auto_gpt(
     # TODO: have this directory live outside the repository (e.g. in a user's
     #   home directory) and have it come in as a command line argument or part of
     #   the env file.
-    if workspace_directory is None:
-        workspace_directory = Path(__file__).parent / "auto_gpt_workspace"
+    # TODO: I have to figure out how to populate this, but must be done after the user selects agent
+    if autogpt_workspace_directory is None:
+        autogpt_workspace_directory = DEFAULT_AUTOGPT_WORKSPACE_DIR
     else:
-        workspace_directory = Path(workspace_directory)
+        autogpt_workspace_directory = Path(autogpt_workspace_directory)
     # TODO: pass in the ai_settings file and the env file and have them cloned into
     #   the workspace directory so we can bind them to the agent.
-    workspace_directory = Workspace.make_workspace(workspace_directory)
-    cfg.workspace_path = str(workspace_directory)
+    autogpt_workspace_directory = Workspace.make_workspace(autogpt_workspace_directory)
+    cfg.autogpt_workspace_path = str(autogpt_workspace_directory)
 
     # HACK: doing this here to collect some globals that depend on the workspace.
-    file_logger_path = workspace_directory / "file_logger.txt"
+    file_logger_path = autogpt_workspace_directory / "file_logger.txt"
     if not file_logger_path.exists():
         with file_logger_path.open(mode="w", encoding="utf-8") as f:
             f.write("File Operation Logger ")
@@ -118,6 +122,8 @@ def run_auto_gpt(
     command_registry.import_commands("autogpt.app")
 
     ai_name = ""
+    # TODO: autogpt workspace should be passed here
+    # TODO: agent workspace gotten from here
     ai_config = construct_main_ai_config()
     ai_config.command_registry = command_registry
     # print(prompt)
@@ -152,6 +158,5 @@ def run_auto_gpt(
         config=ai_config,
         system_prompt=system_prompt,
         triggering_prompt=DEFAULT_TRIGGERING_PROMPT,
-        workspace_directory=workspace_directory,
     )
     agent.start_interaction_loop()
